@@ -104,7 +104,7 @@ fn create_handle(dynamic_img: Arc<DynamicImage>) -> iced::widget::image::Handle{
     Handle::from_pixels(dynamic_img.width(), dynamic_img.height(), display_img_buf.into_raw())
 }
 
-fn create_image_panel_image<P, F, G>(dynamic_img: Arc<DynamicImage>, f: F, g: G) -> Result<ImagePanelData, ImageProcessError> 
+fn create_image_panel_data<P, F, G>(dynamic_img: Arc<DynamicImage>, f: F, g: G) -> Result<ImagePanelData, ImageProcessError> 
 where
 P: Pixel<Subpixel = u16> + 'static,
 F: Fn(Arc<DynamicImage>) -> Arc<ImageBuffer<P, Vec<P::Subpixel>>>,
@@ -121,7 +121,7 @@ G: Fn(u32, u32, Arc<ImageBuffer<P, Vec<P::Subpixel>>>) -> Rgba<u8>,
 }
 
 async fn binarize_image(dynamic_img: Arc<DynamicImage>) -> Result<ImagePanelData, ImageProcessError> {
-    create_image_panel_image(
+    create_image_panel_data(
         dynamic_img, 
         |dynamic_img: Arc<DynamicImage>|{Arc::new(dynamic_img.to_luma16())},
         |x, y, image_buf| {
@@ -135,7 +135,7 @@ async fn binarize_image(dynamic_img: Arc<DynamicImage>) -> Result<ImagePanelData
 }
 
 async fn convolve_filter_avg(dynamic_img: Arc<DynamicImage>) -> Result<ImagePanelData, ImageProcessError> {
-    create_image_panel_image(
+    create_image_panel_data(
         dynamic_img.clone(), 
         |dynamic_img: Arc<DynamicImage>|{Arc::new(dynamic_img.clone().to_luma16())},
         |x, y, image_buf| {

@@ -2,7 +2,7 @@
 
 This is a simple image processing application for my understanding of Rust.
 
-![simple image app](Image_Process_Sample.png)
+![simple image app](readme.png)
 
 ## Dependencies
 
